@@ -3,70 +3,50 @@ const { getTime } = global.utils;
 module.exports = {
 	config: {
 		name: "user",
-		version: "1.4",
+		version: "1.5",
 		author: "NTKhang",
-		countDown: 5,
-		role: 2,
-		description: {
-			vi: "Quản lý người dùng trong hệ thống bot",
-			en: "Manage users in bot system"
-		},
+		countDown: 3,
+		role: 2, // Only Bot Admin/Owner
+		shortDescription: "ইউজার ব্যান বা আনব্যান করুন",
+		longDescription: "বট সিস্টেমে ইউজারদের ব্যান, আনব্যান বা সার্চ করার জন্য অ্যাডমিন কমান্ড।",
 		category: "owner",
-		guide: {
-			vi: "   {pn} [find | -f | search | -s] <tên cần tìm>: tìm kiếm người dùng trong dữ liệu bot bằng tên"
-				+ "\n"
-				+ "\n   {pn} [ban | -b] [<uid> | @tag | reply tin nhắn] <reason>: để cấm người dùng mang id <uid> hoặc người được tag hoặc người gửi của tin nhắn được reply sử dụng bot"
-				+ "\n"
-				+ "\n   {pn} unban [<uid> | @tag | reply tin nhắn]: để bỏ cấm người dùng sử dụng bot",
-			en: "   {pn} [find | -f | search | -s] <name to find>: search for users in bot data by name"
-				+ "\n"
-				+ "\n   {pn} [ban | -b] [<uid> | @tag | reply message] <reason>: to ban user with id <uid> or tagged user or sender of message replied using bot"
-				+ "\n"
-				+ "\n   {pn} unban [<uid> | @tag | reply message]: to unban user using bot"
-		}
+		guide: "{pn} [find | -f | search] <নাম>: নাম দিয়ে ইউজার খুঁজুন\n{pn} [ban | -b] [<uid> | @tag | reply] <কারণ>: ইউজারকে ব্যান করুন\n{pn} [unban | -u] [<uid> | @tag | reply]: ইউজারকে আনব্যান করুন"
 	},
 
 	langs: {
-		vi: {
-			noUserFound: "✗ Không tìm thấy người dùng nào có tên khớp với từ khóa: \"%1\" trong dữ liệu của bot",
-			userFound: "🔎 Tìm thấy %1 người dùng có tên trùng với từ khóa \"%2\" trong dữ liệu của bot:\n%3",
-			uidRequired: "Uid của người cần ban không được để trống, vui lòng nhập uid hoặc tag hoặc reply tin nhắn của 1 người theo cú pháp user ban <uid> <lý do>",
-			reasonRequired: "Lý do ban người dùng không được để trống, vui lòng nhập uid hoặc tag hoặc reply tin nhắn của 1 người theo cú pháp user ban <uid> <lý do>",
-			userHasBanned: "Người dùng mang id [%1 | %2] đã bị cấm từ trước:\n» Lý do: %3\n» Thời gian: %4",
-			userBanned: "Đã cấm người dùng mang id [%1 | %2] sử dụng bot.\n» Lý do: %3\n» Thời gian: %4",
-			uidRequiredUnban: "Uid của người cần unban không được để trống",
-			userNotBanned: "Hiện tại người dùng mang id [%1 | %2] không bị cấm sử dụng bot",
-			userUnbanned: "Đã bỏ cấm người dùng mang id [%1 | %2], hiện tại người này có thể sử dụng bot"
-		},
-		en: {
-			noUserFound: "✗ No user found with name matching keyword: \"%1\" in bot data",
-			userFound: "🔎 Found %1 user with name matching keyword \"%2\" in bot data:\n%3",
-			uidRequired: "Uid of user to ban cannot be empty, please enter uid or tag or reply message of 1 user by user ban <uid> <reason>",
-			reasonRequired: "Reason to ban user cannot be empty, please enter uid or tag or reply message of 1 user by user ban <uid> <reason>",
-			userHasBanned: "User with id [%1 | %2] has been banned before:\n» Reason: %3\n» Date: %4",
-			userBanned: "User with id [%1 | %2] has been banned:\n» Reason: %3\n» Date: %4",
-			uidRequiredUnban: "Uid of user to unban cannot be empty",
-			userNotBanned: "User with id [%1 | %2] is not banned",
-			userUnbanned: "User with id [%1 | %2] has been unbanned"
+		bn: {
+			noUserFound: "❌ \"%1\" নামে কোনো ইউজার ডাটাবেজে পাওয়া যায়নি!",
+			userFound: "🔎 \"%2\" নামে %1 জন ইউজার পাওয়া গেছে:\n%3",
+			uidRequired: "⚠️ ব্যান করার জন্য UID, Tag অথবা মেসেজে রিপ্লাই দিয়ে কারণ লিখুন!",
+			reasonRequired: "⚠️ ব্যান করার কারণ অবশ্যই লিখতে হবে!",
+			userHasBanned: "🔥 [ Diablo System ]\n\nইউজার [%1 | %2] আগেই ব্যান হয়েছে!\n» কারণ: %3\n» তারিখ: %4",
+			userBanned: "🚫 [ Diablo System ]\n\nইউজার [%1 | %2]-কে সফলভাবে ব্যান করা হয়েছে!\n» কারণ: %3\n» তারিখ: %4",
+			uidRequiredUnban: "⚠️ আনব্যান করার জন্য UID, Tag অথবা মেসেজে রিপ্লাই দিন!",
+			userNotBanned: "✅ ইউজার [%1 | %2] বর্তমানে ব্যান নেই!",
+			userUnbanned: "✅ [ Diablo System ]\n\nইউজার [%1 | %2]-কে সফলভাবে আনব্যান করা হয়েছে!"
 		}
 	},
 
 	onStart: async function ({ args, usersData, message, event, prefix, getLang }) {
-		const type = args[0];
+		const type = args[0]?.toLowerCase();
+
 		switch (type) {
-			// find user
+			// Find User by Name
 			case "find":
 			case "-f":
 			case "search":
 			case "-s": {
-				const allUser = await usersData.getAll();
 				const keyWord = args.slice(1).join(" ");
+				if (!keyWord) return message.reply("⚠️ খোঁজার জন্য কোনো নাম টাইপ করুন!");
+
+				const allUser = await usersData.getAll();
 				const result = allUser.filter(item => (item.name || "").toLowerCase().includes(keyWord.toLowerCase()));
 				const msg = result.reduce((i, user) => i += `\n╭Name: ${user.name}\n╰ID: ${user.userID}`, "");
-				message.reply(result.length == 0 ? getLang("noUserFound", keyWord) : getLang("userFound", result.length, keyWord, msg));
-				break;
+				
+				return message.reply(result.length == 0 ? getLang("noUserFound", keyWord) : getLang("userFound", result.length, keyWord, msg));
 			}
-			// ban user
+
+			// Ban User
 			case "ban":
 			case "-b": {
 				let uid, reason;
@@ -83,20 +63,20 @@ module.exports = {
 					uid = args[1];
 					reason = args.slice(2).join(" ");
 				}
-				else return message.SyntaxError();
 
-				if (!uid)
-					return message.reply(getLang("uidRequired"));
-				if (!reason)
-					return message.reply(getLang("reasonRequired", prefix));
-				reason = reason.replace(/\s+/g, ' ');
+				if (!uid) return message.reply(getLang("uidRequired"));
+				if (!reason || !reason.trim()) return message.reply(getLang("reasonRequired"));
+				
+				reason = reason.replace(/\s+/g, ' ').trim();
 
 				const userData = await usersData.get(uid);
-				const name = userData.name;
-				const status = userData.banned.status;
+				const name = userData.name || "Unknown";
+				const status = userData.banned?.status;
 
-				if (status)
+				if (status) {
 					return message.reply(getLang("userHasBanned", uid, name, userData.banned.reason, userData.banned.date));
+				}
+
 				const time = getTime("DD/MM/YYYY HH:mm:ss");
 				await usersData.set(uid, {
 					banned: {
@@ -105,10 +85,11 @@ module.exports = {
 						date: time
 					}
 				});
-				message.reply(getLang("userBanned", uid, name, reason, time));
-				break;
+
+				return message.reply(getLang("userBanned", uid, name, reason, time));
 			}
-			// unban user
+
+			// Unban User
 			case "unban":
 			case "-u": {
 				let uid;
@@ -122,23 +103,30 @@ module.exports = {
 				else if (args[1]) {
 					uid = args[1];
 				}
-				else
-					return message.SyntaxError();
-				if (!uid)
-					return message.reply(getLang("uidRequiredUnban"));
+
+				if (!uid) return message.reply(getLang("uidRequiredUnban"));
+
 				const userData = await usersData.get(uid);
-				const name = userData.name;
-				const status = userData.banned.status;
-				if (!status)
+				const name = userData.name || "Unknown";
+				const status = userData.banned?.status;
+
+				if (!status) {
 					return message.reply(getLang("userNotBanned", uid, name));
+				}
+
 				await usersData.set(uid, {
-					banned: {}
+					banned: {
+						status: false,
+						reason: "",
+						date: ""
+					}
 				});
-				message.reply(getLang("userUnbanned", uid, name));
-				break;
+
+				return message.reply(getLang("userUnbanned", uid, name));
 			}
+
 			default:
-				return message.SyntaxError();
+				return message.reply("⚠️ ভুল কমান্ড! সঠিক ব্যবহার:\n• /user ban <UID/@tag/Reply> <কারণ>\n• /user unban <UID/@tag/Reply>\n• /user find <নাম>");
 		}
 	}
 };
