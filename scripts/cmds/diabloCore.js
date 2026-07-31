@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "diabloCore",
     version: "3.0",
-    author: "Protik Shah",
+    author: "NTKhang",
     countDown: 0,
     role: 0,
     shortDescription: "Diablo Core Trolling and Roasting System",
