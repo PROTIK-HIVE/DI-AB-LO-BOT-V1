@@ -85,7 +85,7 @@ module.exports = {
 
 // 🤖 Gemini AI Custom Roasting Function
 async function callGeminiRoastEngine({ api, threadID, messageID, prompt }) {
-	const GEMINI_API_KEY = "AQ.Ab8RN6IyyvlcJxgbMbo437YEQ8Q-IHL7UVAiAc4Vm24p9uOV6w"; // এখানে তোর জেমিনি এপিআই কি বসা
+	const GEMINI_API_KEY = "AQ.Ab8RN6IyyvlcJxgbMbo437YEQ8Q-IHL7UVAiAc4Vm24p9uOV6w" ;
 
 	const systemInstruction = `
  You are 'di ablo', an iconic, hilarious, extremely argumentative, and sarcastic Facebook group bot.
