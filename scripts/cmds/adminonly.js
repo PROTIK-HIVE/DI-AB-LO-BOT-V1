@@ -6,35 +6,22 @@ module.exports = {
 	config: {
 		name: "adminonly",
 		aliases: ["adonly", "onlyad", "onlyadmin"],
-		version: "1.5",
+		version: "1.6",
 		author: "NTKhang",
-		countDown: 5,
-		role: 2,
-		description: {
-			vi: "bật/tắt chế độ chỉ admin mới có thể sử dụng bot",
-			en: "turn on/off only admin can use bot"
-		},
+		countDown: 3,
+		role: 2, // Only Bot Admin/Owner
+		shortDescription: "শুধু অ্যাডমিন বট ব্যবহার করার মোড চালু/বন্ধ করুন",
+		longDescription: "অ্যাডমিন অনলি মোড চালু করলে বট অ্যাডমিন ছাড়া সাধারণ ইউজাররা বটের কোনো কমান্ড ব্যবহার করতে পারবে না।",
 		category: "owner",
-		guide: {
-			vi: "   {pn} [on | off]: bật/tắt chế độ chỉ admin mới có thể sử dụng bot"
-				+ "\n   {pn} noti [on | off]: bật/tắt thông báo khi người dùng không phải là admin sử dụng bot",
-			en: "   {pn} [on | off]: turn on/off the mode only admin can use bot"
-				+ "\n   {pn} noti [on | off]: turn on/off the notification when user is not admin use bot"
-		}
+		guide: "{pn} [on | off]: এডমিন অনলি মোড অন বা অফ করতে\n{pn} noti [on | off]: ইউজারদের অ্যালার্ট মেসেজ পাঠানো চালু বা বন্ধ করতে"
 	},
 
 	langs: {
-		vi: {
-			turnedOn: "Đã bật chế độ chỉ admin mới có thể sử dụng bot",
-			turnedOff: "Đã tắt chế độ chỉ admin mới có thể sử dụng bot",
-			turnedOnNoti: "Đã bật thông báo khi người dùng không phải là admin sử dụng bot",
-			turnedOffNoti: "Đã tắt thông báo khi người dùng không phải là admin sử dụng bot"
-		},
-		en: {
-			turnedOn: "Turned on the mode only admin can use bot",
-			turnedOff: "Turned off the mode only admin can use bot",
-			turnedOnNoti: "Turned on the notification when user is not admin use bot",
-			turnedOffNoti: "Turned off the notification when user is not admin use bot"
+		bn: {
+			turnedOn: "🔒 [ Diablo System ]\nএডমিন অনলি মোড **চালু** করা হলো! এখন থেকে কেবল বট অ্যাডমিনরা বট ব্যবহার করতে পারবে।",
+			turnedOff: "🔓 [ Diablo System ]\nএডমিন অনলি মোড **বন্ধ** করা হলো! এখন থেকে সবাই বট ব্যবহার করতে পারবে।",
+			turnedOnNoti: "🔔 [ Diablo System ]\nসাধারণ ইউজার কমান্ড দিলে অ্যাডমিন-অনলি নোটিফিকেশন দেখানো **চালু** করা হলো।",
+			turnedOffNoti: "🔕 [ Diablo System ]\nসাধারণ ইউজার কমান্ড দিলে অ্যাডমিন-অনলি নোটিফিকেশন দেখানো **বন্ধ** করা হলো।"
 		}
 	},
 
@@ -43,23 +30,27 @@ module.exports = {
 		let value;
 		let indexGetVal = 0;
 
-		if (args[0] == "noti") {
+		if (args[0]?.toLowerCase() == "noti") {
 			isSetNoti = true;
 			indexGetVal = 1;
 		}
 
-		if (args[indexGetVal] == "on")
+		const mode = args[indexGetVal]?.toLowerCase();
+
+		if (mode == "on")
 			value = true;
-		else if (args[indexGetVal] == "off")
+		else if (mode == "off")
 			value = false;
 		else
-			return message.SyntaxError();
+			return message.reply("⚠️ ব্যবহারের সঠিক নিয়ম:\n• /adminonly on/off (এডমিন অনলি মোড চালু/বন্ধ)\n• /adminonly noti on/off (নোটিফিকেশন চালু/বন্ধ)");
 
 		if (isSetNoti) {
+			if (!config.hideNotiMessage) config.hideNotiMessage = {};
 			config.hideNotiMessage.adminOnly = !value;
 			message.reply(getLang(value ? "turnedOnNoti" : "turnedOffNoti"));
 		}
 		else {
+			if (!config.adminOnly) config.adminOnly = {};
 			config.adminOnly.enable = value;
 			message.reply(getLang(value ? "turnedOn" : "turnedOff"));
 		}
