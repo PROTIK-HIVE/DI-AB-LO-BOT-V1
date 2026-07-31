@@ -3,30 +3,30 @@ const axios = require("axios");
 module.exports = {
 	config: {
 		name: "diabloCore",
-		version: "3.5",
+		version: "4.0",
 		author: "NTKhang",
 		countDown: 0,
 		role: 0,
-		shortDescription: "Diablo Core Trolling & Gemini AI Roasting System",
-		longDescription: "Handles emoji trolling, keyword roasting, night-owl trolling, and Gemini AI powered mention responses.",
+		shortDescription: "Diablo Core Trolling and Gemini AI Roasting System",
+		longDescription: "Handles emoji trolling, keyword roasting, night-owl trolling, and mention responses.",
 		category: "system"
 	},
 
 	onStart: async function ({ api, event }) {
-		// অন-স্টার্টে কোনো ম্যানুয়াল কমান্ড চালু করার প্রয়োজন নেই
+		// অন-স্টার্টে কিছু করার দরকার নেই
 	},
 
 	onChat: async function ({ api, event, message }) {
 		const { body, threadID, messageID, senderID, mentions, type, messageReply } = event;
 		const botID = api.getCurrentUserID();
 
-		// বট নিজের মেসেজ ইগনোর করবে
+		// মেসেজ না থাকলে বা বট নিজের মেসেজ দিলে ইগনোর করবে
 		if (!body || senderID == botID) return;
 
 		const msgLower = body.toLowerCase();
-		const prefix = global.GoatBot.config.prefix || "!";
+		const prefix = global.GoatBot?.config?.prefix || "#";
 
-		// 🐸 ১. ইমোজি স্প্যাম ট্রোলিং (২টির বেশি ইমোজি বা শুধু ইমোজি দিলে)
+		// 🐸 ১. ইমোজি স্প্যাম ট্রোলিং
 		const emojiRegex = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu;
 		const emojisFound = body.match(emojiRegex) || [];
 		const textWithoutEmojis = body.replace(emojiRegex, '').trim();
@@ -42,7 +42,7 @@ module.exports = {
 			const multiEmojiReplies = [
 				"কিরে, ২টার বেশি ইমোজি দেওয়ার চুলকানি বেড়ে গেল নাকি তোর? টাইপ করতে কি হাত ব্যাথা করে? 🐸",
 				"ঐ ইমোজির দোকানদার! দুইটার বেশি ইমোজি মেরে ভাব মারছিস? প্রতীক বসের অ্যাসিস্ট্যান্টের সাথে পাঙ্গা নিতে ব্রেন লাগে, যেটা তোর নাই!",
-				"ইমোজির বোর বস্তা খালি না করে ২ লাইন রিলেভেন্ট কথা ক!"
+				"ইমোজির বস্তা খালি না করে ২ লাইন রিলেভেন্ট কথা ক!"
 			];
 			return api.sendMessage(multiEmojiReplies[Math.floor(Math.random() * multiEmojiReplies.length)], threadID, messageID);
 		}
@@ -71,9 +71,9 @@ module.exports = {
 			return api.sendMessage("কিরে রাতকানা ভূত? এই রাতে জেগে কার প্রোফাইল চেক করছিস? প্রতীক বসের অ্যাসিস্ট্যান্ট তোরে ঘুমানোর আদেশ দিচ্ছে, যা ভাগ! 🤫", threadID, messageID);
 		}
 
-		// 🔥 ৪. Gemini AI Roasting Engine (বটকে নাম ধরে ডাকলে, মেনশন দিলে বা রিপ্লাই করলে)
+		// 🔥 ৪. Gemini AI Roasting Engine (বটকে মেনশন, রিপ্লাই বা নাম ধরে ডাকলে)
 		const isMentioned = mentions && Object.keys(mentions).includes(botID);
-		const isReplyToBot = type === "message_reply" && messageReply.senderID == botID;
+		const isReplyToBot = type === "message_reply" && messageReply?.senderID == botID;
 		const isCalledByName = msgLower.includes("diablo") || msgLower.includes("বট") || msgLower.includes("bot");
 
 		if ((isMentioned || isReplyToBot || isCalledByName) && !body.startsWith(prefix)) {
@@ -85,16 +85,14 @@ module.exports = {
 
 // 🤖 Gemini AI Custom Roasting Function
 async function callGeminiRoastEngine({ api, threadID, messageID, prompt }) {
-	const GEMINI_API_KEY = "AQ.Ab8RN6IyyvlcJxgbMbo437YEQ8Q-IHL7UVAiAc4Vm24p9uOV6w" ;
+	const GEMINI_API_KEY = "AQ.Ab8RN6IwWksRsBu9J56Zkg7E9NaOrzL5VoXTILrp7dF7XqC8MQ"; 
 
-	const systemInstruction = `
- You are 'di ablo', an iconic, hilarious, extremely argumentative, and sarcastic Facebook group bot.
- You ALWAYS identify yourself as the Personal Assistant of 'প্রতীক শাহ' (or প্রতীক বস).
- Whenever someone tries to argue with you, roast them with lines like: "প্রতীক বসের অ্যাসিস্ট্যান্টের সাথে পাঙ্গা নিতে ব্রেন লাগে, যেটা তোর নাই!"
- Always show off your power using the name 'প্রতীক'.
- Reply strictly in informal, casual Bangladeshi Bengali / Banglish (2-3 lines max).
- Do not use formal or polite language. Throw witty, funny insults and trollings, but strictly DO NOT use severe abusive slurs/bad swear words.
- `;
+	const systemInstruction = `You are 'diablo', an iconic, hilarious, extremely argumentative, and sarcastic Facebook group bot.
+You ALWAYS identify yourself as the Personal Assistant of 'প্রতীক শাহ' (or প্রতীক বস).
+Whenever someone tries to argue with you, roast them with lines like: "প্রতীক বসের অ্যাসিস্ট্যান্টের সাথে পাঙ্গা নিতে ব্রেন লাগে, যেটা তোর নাই!"
+Always show off your power using the name 'প্রতীক'.
+Reply strictly in informal, casual Bangladeshi Bengali / Banglish (2-3 lines max).
+Do not use formal or polite language. Throw witty, funny insults and trollings, but strictly DO NOT use severe abusive slurs/bad swear words.`;
 
 	try {
 		const response = await axios.post(
@@ -117,7 +115,7 @@ async function callGeminiRoastEngine({ api, threadID, messageID, prompt }) {
 			return api.sendMessage("প্রতীক বসের অ্যাসিস্ট্যান্টের সাথে পাঙ্গা নিতে ব্রেন লাগে, যেটা তোর ওই খালি মাথায় নাই! 😉", threadID, messageID);
 		}
 	} catch (err) {
-		console.error("Diablo Gemini Error:", err);
+		console.error("Diablo Gemini Error:", err?.response?.data || err?.message);
 		return api.sendMessage("প্রতীক বসের পাওয়ার দেখে তোর কথা বন্ধ হয়ে গেছে নাকি? উত্তর দেওয়ার টাইমে সার্ভার হ্যাং করাস কেন! 🤪", threadID, messageID);
 	}
 }
