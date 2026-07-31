@@ -4,7 +4,7 @@ module.exports = {
 	config: {
 		name: "diabloCore",
 		version: "3.5",
-		author: "Pratik Shah",
+		author: "NTKhang",
 		countDown: 0,
 		role: 0,
 		shortDescription: "Diablo Core Trolling & Gemini AI Roasting System",
